@@ -1,19 +1,23 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from os import path
+from flask_migrate import Migrate
 
-
-
-DB_NAME = "aplicacion_tesina"
 db = SQLAlchemy()
+
 
 def create_app():
     app= Flask(__name__)
-    app.config['SECRET_KEY']='hjshshshshshs'
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:@localhost/aplicacion_tesina'
-    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    app.config.from_object('website.utils.configuration.DevelopmentConfig')
+    ##app.config['SECRET_KEY']='hjshshshshshs' 
+    ##app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:@localhost/aplicacion_tesina'
+    ##app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    
+    #configuraciones
+    migrate= Migrate(app, db)
     db.init_app(app)
     
+    #vistas
     from .views import views
     from .auth import auth
     
